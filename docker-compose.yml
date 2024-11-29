@@ -1,0 +1,24 @@
+version: "3.9"
+
+services:
+  app:
+    build: ./app  # Build Flask app from the Dockerfile in ./app
+    ports:
+      - "5000:5000"  # Map port 5000 of the host to port 5000 in the container
+    environment:
+      FLASK_ENV: development  # Optional environment variable for Flask
+    depends_on:
+      - db  # Ensure the database starts before the app
+
+  db:
+    image: mysql:8.0  # Use the MySQL 8.0 image
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass  # Root user password
+      MYSQL_DATABASE: flaskdb       # Database name
+      MYSQL_USER: flaskuser         # Application user
+      MYSQL_PASSWORD: flaskpass     # Application user's password
+    volumes:
+      - db-data:/var/lib/mysql  # Persistent storage for the database
+
+volumes:
+  db-data:  # Declare a named volume for database persistence
